@@ -1,10 +1,49 @@
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/> <!-- 'classic' theme -->
+{% endblock %}
 {% block body %}
 	<div class="">
 		<a href="{{ path('curiculumList')}}" class="btn btn-lg btn-outline-warning">Retour à la liste</a> 
 		<a href="{{ path('test_snappy',{id: curiculum.id})}}" class="btn btn-lg btn-outline-info ml-2">Prévisualiser</a>
 	</div>
 	<div class="display-3 text-center pt-5">Editer CV</div>
+	<div class="border-bottom border-light w-100 my-5"></div>
+	<div class="display-4 text">Curriculum</div>
+	{# ----------------------------------------- #}
+	{# Début du formulaire de modification de CV #}
+	{# ----------------------------------------- #}
+	{{ form_start(form)}}
+		<div class="form-group row">
+			<div class="col-4">
+				{{ form_label(form.title) }}
+				{{ form_widget(form.title, { 'attr': { 'class': 'form-control' } }) }}
+			</div>
+			<div class="col-4 form-group">
+				{{ form_label(form.imageFile) }}
+				{{ form_widget(form.imageFile, { 'attr': { 'class': 'form-control' } }) }}
+			</div>
+			<div class="col-4 form-group">
+				{{ form_label(form.template) }}
+				{{ form_widget(form.template, { 'attr': { 'class': 'form-control' } }) }}
+			</div>
+			<div class="col-4 form-group">
+				{{ form_label(form.highlightColor) }}
+				{{ form_widget(form.highlightColor, { 'attr': { 'class': 'form-control' } }) }}
+			</div>
+			<div class="col-4 form-group">
+				<label for="">Choisir la couleur</label>
+				<div class="color-picker"></div>
+			</div>
+			<div class="col-4">
+				{{ form_widget(form.save, { 'attr': { 'class': 'btn btn-outline-success btn-lg mt-4' }}) }}
+			</div>
+		</div>
+		
+	{{ form_end(form)}}
+	{# --------------------------------------- #}
+	{# Fin du formulaire de modification de CV #}
+	{# --------------------------------------- #}
 	<div class="border-bottom border-light w-100 my-5"></div>
 	<div class="display-4 text">Job(s)</div>
 	<div class="row">
@@ -98,8 +137,52 @@
 	</div>
 {% endblock %}
 {% block javascripts %}
+	<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
 	<script>
+		$(function() {
+			const pickr = new Pickr({
+				el: '.color-picker',
+				theme: 'classic', // or 'monolith', or 'nano'
+				appClass: 'custom-class',
+				default: '#{{curiculum.highlightColor}}',
+				swatches: [
+					'rgba(244, 67, 54, 1)',
+					'rgba(233, 30, 99, 1)',
+					'rgba(156, 39, 176, 1)',
+					'rgba(103, 58, 183, 1)',
+					'rgba(63, 81, 181, 1)',
+					'rgba(33, 150, 243, 1)',
+					'rgba(3, 169, 244, 1)',
+					'rgba(0, 188, 212, 1)',
+					'rgba(0, 150, 136, 1)',
+					'rgba(76, 175, 80, 1)',
+					'rgba(139, 195, 74, 1)',
+					'rgba(205, 220, 57, 1)',
+					'rgba(255, 235, 59, 1)',
+					'rgba(255, 193, 7, 1)'
+					
+				],
+				components: {
+					// Main components
+					preview: true,
+					opacity: false,
+					hue: true,
+					// Input / output Options
+					interaction: {
+						hex: true,
+						input: true,
+						clear: true,
+						save: true
+					}
+				}
+			});
 	
+			pickr.on('change', (color, source, instance) => {
+				$('#curriculum_edite_highlightColor').val(color.toHEXA()[0]+color.toHEXA()[1]+color.toHEXA()[2]);
+				$('#curriculum_edite_highlightColor');
+			});
+	
+		});
 		$(function() {
 			//**********************************************//
 			//************Gestion des Jobs Début************//

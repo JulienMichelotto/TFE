@@ -3,13 +3,16 @@
 namespace App\Form;
 
 use App\Entity\Curiculum;
+use App\Entity\Template;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
-class CuriculumType extends AbstractType
+class CurriculumEditeType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -26,10 +29,19 @@ class CuriculumType extends AbstractType
                 'download_uri' => false,
                 'image_uri' => false,
             ])
+            ->add('template', EntityType::class,[
+                'class' => Template::class,
+                'choice_label' => 'descr',
+            ])
+             ->add('highlightColor', null,[
+                'label' => 'Couleur de thème',
+            ])
             ->add('save', SubmitType::class, [
-                'label' => 'Modifier',
-            ]);
+                'label' => 'Enregistrer les modifications',
+            ])
+        ;
     }
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

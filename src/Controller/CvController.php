@@ -11,7 +11,9 @@ use App\Entity\Job;
 use App\Entity\JobDetail;
 use App\Entity\User;
 use App\Form\CuriculumType;
+use App\Form\CurriculumEditeType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -160,11 +162,19 @@ class CvController extends AbstractController
 
         /** @var User $user */
         $user = $security->getUser();
+        dump($request);
         $em = $this->getDoctrine()->getManager();
         $cvToEdit = $em->getRepository(Curiculum::class)->find($request->attributes->get('id'));
+        $form = $this->createForm(CurriculumEditeType::class,$cvToEdit);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($cvToEdit);
+            $em->flush();
+        }
         return $this->render('cv/cvEdit.html.twig', [
             "curiculum" => $cvToEdit,
             "currentUser" => $user,
+            "form" => $form->createView(),
         ]);
     }
     /**

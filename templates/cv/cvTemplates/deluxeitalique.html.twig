@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
 	</head>
 	<body>
-		<div class="display-4 text-center text-warning py-3" style="background-color:#212121;">
+		<div class="display-4 text-center py-3" style="background-color:#212121; color:#{{curiculum.highlightColor}};">
 			<div class="d-flex justify-content-center">
 				<img src="{{ vich_uploader_asset(curiculum,'imageFile') | imagine_filter('carre')}}" alt="{{curiculum.imageName}}" class="p-2 rounded-circle" style="width:200px; border-style: solid; border-width: bold; overflow: hidden;">
 			</div>
@@ -20,7 +20,7 @@
 			<h1 class="d-flex justify-content-center" style="font-style: italic !important; font-weight: 100 !important;">
 				{{curiculum.title}}
 			</h1>
-			<div class="border border-bottom border-warning"></div>
+			<div class="" style="border: solid 1px; border-bottom-color:#{{curiculum.highlightColor}};"></div>
 		</div>
 		<div class="container d-flex float-none py-3">
 			<div class="mr-auto float-left" style="padding: 0 10px 0 10px; width:60%;">
@@ -43,7 +43,7 @@
 								{% endif %}
 							</div>
 							<div class="float-left" style="width:80%;">
-								<p class="h6 text-uppercase font-weight-bold w-100 text-warning">
+								<p class="h6 text-uppercase font-weight-bold w-100" style="color:#{{curiculum.highlightColor}};">
 									{{ job.descr}}
 									{% if job.societyName %}
 										<small class="text-muted">{{ job.societyName }}</small>
@@ -89,7 +89,7 @@
 								{% endif %}
 							</div>
 							<div class="float-left" style="width:80%;">
-								<p class="h6 text-uppercase font-weight-bold w-100 text-warning">
+								<p class="h6 text-uppercase font-weight-bold w-100" style="color:#{{curiculum.highlightColor}};">
 									{{ formation.descr}}
 									{% if formation.name %}
 										<small class="text-muted">
@@ -123,7 +123,7 @@
 				<h4 class="d-flex mt-4 w-auto text-uppercase" style="border-bottom: 2px solid black !important; padding-bottom:15px">
 					<i class="fas fa-id-badge h1 my-auto float-left mr-2"></i>Informations
 				</h4>
-				<h6 class="text-uppercase font-weight-bold pt-3 text-warning">
+				<h6 class="text-uppercase font-weight-bold pt-3 " style="color:#{{curiculum.highlightColor}};">
 					{{ curiculum.title }}
 				</h6>
 				<h6 style="line-height:1.5;">
@@ -152,13 +152,13 @@
 				</h4>
 				{% for extra in curiculum.extra %}
 					<div class="pt-2">
-						<span class="text-uppercase text-bold font-weight-bold text-warning">{{ extra.title }}</span>
+						<span class="text-uppercase text-bold font-weight-bold" style="color:#{{curiculum.highlightColor}};">{{ extra.title }}</span>
 						<br>
 						{% for detail in extra.details %}
 							{% if detail.percent != null %}
 								{{ detail.detail}}
 								<div class="bg-light" style="height:16px; width:100%;">
-									<div class="bg-warning" style="height:16px; width:{{detail.percent}}%;"></div>
+									<div class="" style="background-color:#{{curiculum.highlightColor}}; height:16px; width:{{detail.percent}}%;"></div>
 								</div>
 							{% else %}
 								{% if loop.last %}

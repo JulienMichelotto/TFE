@@ -25,8 +25,6 @@ class TestSnappyController extends AbstractController
         $currentCV = $em->getRepository(Curiculum::class)->find($request->get('id'));
         $dateForName = date("ymd-is");
         $nameFile = 'C:/wamp64/www/pdfmades/'.$dateForName.'-pdfname.pdf';
-        
-        // $snappy->generateFromHtml("http://127.0.0.1:8000/home",'C:\wamp64\www\pdfmades\testest.pdf',$array,true);
         $snappy->setOption('margin-bottom', '0mm');
 		$snappy->setOption('margin-top', '0mm');
 		$snappy->setOption('margin-left', '0mm');
@@ -43,7 +41,6 @@ class TestSnappyController extends AbstractController
         $currentCV->setCvFile($nameFile);
         $em->persist($currentCV);
         $em->flush();
-        // $snappy->generate("http://127.0.0.1:8000/", 'C:\wamp64\www\pdfmades\testest.pdf',$array,true);
         return $this->render('cv/cvTemplates/deluxeitalique.html.twig', [
             'curiculum' => $currentCV,
         ]);
