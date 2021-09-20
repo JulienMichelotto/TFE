@@ -1,0 +1,94 @@
+{% extends "base.html.twig" %}
+{% block body %}
+	<div class="display-3 text-center p-5">Modifier le template
+		{{templateToShow.id}}</div>
+	<div class="row">
+		<div class="form-group col-4">
+			<label for="" class="form-label">Modèle</label>
+			<select name="" class="form-control" id="input-select-modele">
+				<option value="basic" {% if templateToShow.descr == "basic" %} selected {% endif %}>Basic</option>
+				<option value="deluxe italique" {% if templateToShow.descr == "deluxe italique" %} selected {% endif %}>Deluxe italique</option>
+			</select>
+		</div>
+		<div class="form-group col-4">
+			<label for="" class="form-label">Fond</label>
+			<select name="" class="form-control" id="input-select-fond">
+				<option value="true" {% if templateToShow.dark == true %} selected {% endif %}>Sombre</option>
+				<option value="false" {% if templateToShow.dark == false %} selected {% endif %}>Clair</option>
+			</select>
+		</div>
+		<div class="form-group col-4">
+			<label for="" class="form-label">Couleur(s) actuelle(s)</label>
+			<div class="row no-gutters" id="currentColorList">
+				{% for color in templateToShow.colors %}
+					<div id="colorList{{ color.id }}" data-color-hex="{{ color.descr }}" class="col-4 px-2" style="background-color:{{ color.descr }};">{{ color.descr }}
+						<span style="position:absolute;right:0px;top:-3px;">
+							<i data-color-to-del="{{ color.id }}" class="fas fa-times btn"></i>
+						</span>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="form-group col-4">
+			<label for="" class="form-label">Ajouter une couleur</label>
+			<div class="row no-gutters" id="listColorToAdd">
+				{% for color in colorList %}
+					{% if color not in templateToShow.colors %}
+					<div id="colorToAdd{{ color.id }}" data-color-hex="{{ color.descr }}" class="col-4 px-2" style="background-color:{{ color.descr }};">{{ color.descr }}<span style="position:absolute;right:0px;top:-3px;">
+							<i data-color-to-add="{{ color.id }}" class="fas fa-plus btn"></i>
+						</span>
+					</div>
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+		<div class="col-12">
+			<div class="col-3 btn btn-outline-success btn-lg mt-4 jq-edite-template">Valider les changements</div>
+			<a href="{{path('templateList')}}" class="col-3 btn btn-outline-warning btn-lg mt-4 ml-4">Retour à la liste</a>
+		</div>
+	</div>
+{% endblock %}
+{% block javascripts %}
+	<script>
+		$(document).on('click','.fa-plus', function(event){
+			let hex = $('#colorToAdd'+$(this).attr('data-color-to-add')).attr('data-color-hex');
+			let id = $(this).attr('data-color-to-add');
+			$('#currentColorList').append('	<div id="colorList'+id+'" data-color-hex="'+hex+'" class="col-4 px-2" style="background-color:'+hex+';">'+hex+ 
+												'<span style="position:absolute;right:0px;top:-3px;">'+
+													'<i data-color-to-del="'+id+'" class="fas fa-times btn"></i>'+
+												'</span>'+
+											'</div>');
+			$(this).parent().parent().remove();
+		});
+		$(document).on('click','.fa-times', function(event){
+			let hex = $('#colorList'+$(this).attr('data-color-to-del')).attr('data-color-hex');
+			let id = $(this).attr('data-color-to-del');
+			$('#listColorToAdd').append('	<div id="colorToAdd'+id+'" data-color-hex="'+hex+'" class="col-4 px-2" style="background-color:'+hex+';">'+hex+ 
+												'<span style="position:absolute;right:0px;top:-3px;">'+
+													'<i data-color-to-add="'+id+'" class="fas fa-plus btn"></i>'+
+												'</span>'+
+											'</div>');
+			$(this).parent().parent().remove();
+		});
+		$(document).on('click','.jq-edite-template', function(event){
+			event.preventDefault();
+			let colorToAdd = $('.fa-times');
+			let arrayColorToSend = [];
+			let id = {{templateToShow.id}};
+			if(colorToAdd.length != 0) {
+				for(let i=0; i < colorToAdd.length;i++){
+					arrayColorToSend[i] = ($(colorToAdd[i]).attr('data-color-to-del'));
+				}
+			}
+			let modeleToSend = $('#input-select-modele').val();
+			let fondToSend = $('#input-select-fond').val();
+			$.ajax({
+				method: "POST",
+				data: {modeleToSend,fondToSend,arrayColorToSend,id},
+				url: "{{ path('templateEdite') }}"
+			})
+			.done(function (results) {
+			});
+		})
+	</script>
+{% endblock %}

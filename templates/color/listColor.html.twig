@@ -1,0 +1,14 @@
+{% for color in listColor %}
+	{% if color.active == "true" %}
+		<tr>
+			<th>{{color.id}}</th>
+			<td style="background-color:{{color.descr}};" class="">{{color.descr}}</td>
+			<td>
+				{# <a href=""><i class="fas fa-edit btn btn-warning mr-2"></i></a> #}
+				<a href="">
+					<i class="fas fa-trash-alt btn btn-danger jq-dell-color" id="{{color.id}}"></i>
+				</a>
+			</td>
+		</tr>
+	{% endif %}
+{% endfor %}

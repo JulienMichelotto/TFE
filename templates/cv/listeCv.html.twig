@@ -1,0 +1,15 @@
+{% for cv in cvList %}
+    {% if cv.active %}
+        <tr>
+            <th scope="row">{{ cv.id }}</th>
+            <td>{{ cv.title}}</td>
+            <td>
+                <a href="{{ path('curiculumShow',{'id': cv.id}) }}"><i class="fas fa-edit btn btn-warning mr-2"></i></a>
+                {% if cv.cvFile != null %}
+                    <a href="{{ path('dlCuriculum',{'id': cv.id}) }}"><i class="fa fa-download btn btn-info mr-2"></i></a>
+                {% endif %}
+                <a href=""><i class="fas fa-trash-alt btn btn-danger jq-dell-cv " id="{{cv.id}}"></i></a>                
+            </td>
+        </tr>
+    {% endif %}
+{% endfor %}

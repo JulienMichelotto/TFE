@@ -1,0 +1,24 @@
+{% for template in listTemplate %}
+	{% if template.active == true %}
+		<tr>
+			<th>{{template.id}}</th>
+			<td>{{template.descr}}</td>
+			<td>
+				{% if template.dark == true %}
+					sombre
+				{% else %}
+					claire
+				{% endif %}
+
+			</td>
+			<td>
+				<a href="{{path('templateShow', {id: template.id})}}">
+					<i class="fas fa-edit btn btn-warning mr-2"></i>
+				</a>
+				<a href="">
+					<i class="fas fa-trash-alt btn btn-danger jq-dell-template" id="{{template.id}}"></i>
+				</a>
+			</td>
+		</tr>
+	{% endif %}
+{% endfor %}

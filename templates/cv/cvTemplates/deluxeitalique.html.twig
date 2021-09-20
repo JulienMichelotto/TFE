@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>DeluxeItalique</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+	</head>
+	<body>
+		<div class="display-4 text-center text-warning py-3" style="background-color:#212121;">
+			<div class="d-flex justify-content-center">
+				<img src="{{ vich_uploader_asset(curiculum,'imageFile') | imagine_filter('carre')}}" alt="{{curiculum.imageName}}" class="p-2 rounded-circle" style="width:200px; border-style: solid; border-width: bold; overflow: hidden;">
+			</div>
+			<div class="d-flex justify-content-center text-white text-uppercase">
+				{{ curiculum.user.firstName|capitalize}}
+				{{ curiculum.user.lastName|capitalize}}
+			</div>
+			<h1 class="d-flex justify-content-center" style="font-style: italic !important; font-weight: 100 !important;">
+				{{curiculum.title}}
+			</h1>
+			<div class="border border-bottom border-warning"></div>
+		</div>
+		<div class="container d-flex float-none py-3">
+			<div class="mr-auto float-left" style="padding: 0 10px 0 10px; width:60%;">
+				<h4 class="d-flex mt-4 w-auto text-uppercase" style="border-bottom: 2px solid black !important; padding-bottom:15px">
+					<i class="fas fa-wallet h1 my-auto float-left mr-2"></i>Expériences professionnelles
+				</h4>
+				<div class="">
+					{% for job in curiculum.job %}
+						<div class="clearfix"></div>
+						<div class="w-100 py-3">
+							<div class="text-center px-3 text-muted float-left" style="width:20%;">
+								{{ job.start|date("d/m/Y")}}
+								<br>
+								-
+								<br>
+								{% if job.end == null %}
+									Maintenant
+								{% else %}
+									{{ job.end|date("d/m/Y")}}
+								{% endif %}
+							</div>
+							<div class="float-left" style="width:80%;">
+								<p class="h6 text-uppercase font-weight-bold w-100 text-warning">
+									{{ job.descr}}
+									{% if job.societyName %}
+										<small class="text-muted">{{ job.societyName }}</small>
+									{% endif %}
+								</p>
+								{% if job.details %}
+									<p class="pr-2">
+										{% for detail in job.details %}
+											{% if loop.last %}
+												{{ detail.detail }}
+											{% else %}
+												{{ detail.detail }}
+												-
+											{% endif %}
+										{% endfor %}
+									</p>
+								{% endif %}
+							</div>
+						</div>
+						{% if loop.last %}
+							<div class="clearfix py-3 mb-4"></div>
+						{% else %}
+							<div class="clearfix border-bottom py-3"></div>
+						{% endif %}
+					{% endfor %}
+				</div>
+				<h4 class="d-flex mt-4 w-auto text-uppercase" style="border-bottom: 2px solid black !important; padding-bottom:15px;">
+					<i class="fas fa-graduation-cap h1 my-auto float-left mr-2"></i>Formations / Diplômes
+				</h4>
+				<div>
+					{% for formation in curiculum.formation %}
+						<div class="clearfix"></div>
+						<div class="w-100 py-3">
+							<div class="text-center px-3 text-muted float-left" style="width:20%;">
+								{{ formation.start|date("d/m/Y")}}
+								<br>
+								-
+								<br>
+								{% if formation.end == null %}
+									Maintenant
+								{% else %}
+									{{ formation.end|date("d/m/Y")}}
+								{% endif %}
+							</div>
+							<div class="float-left" style="width:80%;">
+								<p class="h6 text-uppercase font-weight-bold w-100 text-warning">
+									{{ formation.descr}}
+									{% if formation.name %}
+										<small class="text-muted">
+											{{ formation.name}}
+										</small>
+									{% endif %}
+								</p>
+								{% if formation.details %}
+									<p class="pr-2">
+										{% for detail in formation.details %}
+											{% if loop.last %}
+												{{ detail.detail }}
+											{% else %}
+												{{ detail.detail }}
+												-
+											{% endif %}
+										{% endfor %}
+									</p>
+								{% endif %}
+							</div>
+						</div>
+						{% if loop.last %}
+							<div class="clearfix pt-3 mb-5"></div>
+						{% else %}
+							<div class="clearfix border-bottom py-3"></div>
+						{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+			<div class="float-left" style="padding: 0 10px 0 10px; width:40%;">
+				<h4 class="d-flex mt-4 w-auto text-uppercase" style="border-bottom: 2px solid black !important; padding-bottom:15px">
+					<i class="fas fa-id-badge h1 my-auto float-left mr-2"></i>Informations
+				</h4>
+				<h6 class="text-uppercase font-weight-bold pt-3 text-warning">
+					{{ curiculum.title }}
+				</h6>
+				<h6 style="line-height:1.5;">
+					<span class="text-uppercase">
+						{{ curiculum.user.lastName }}
+					</span>
+					{{ curiculum.user.firstName|capitalize }}
+					<br>
+					{% if curiculum.user.phoneNumber and curiculum.user.phoneNumber != "" %}
+						{{ curiculum.user.phoneNumber }}
+						<br>
+					{% endif %}
+					{{ curiculum.user.gsmNumber }}
+					<br>
+					{{ curiculum.user.email }}
+					<br>
+					{{ curiculum.user.address }}
+					{{ curiculum.user.streetNumber }}
+					/
+					{{ curiculum.user.boxNumber }}
+					<br>
+					7000 Mons
+				</h6>
+				<h4 class="d-flex mt-4 w-auto text-uppercase" style="border-bottom: 2px solid black !important; padding-bottom:15px">
+					<i class="fas fa-user-plus h1 my-auto float-left mr-2"></i>Connaissances diverses
+				</h4>
+				{% for extra in curiculum.extra %}
+					<div class="pt-2">
+						<span class="text-uppercase text-bold font-weight-bold text-warning">{{ extra.title }}</span>
+						<br>
+						{% for detail in extra.details %}
+							{% if detail.percent != null %}
+								{{ detail.detail}}
+								<div class="bg-light" style="height:16px; width:100%;">
+									<div class="bg-warning" style="height:16px; width:{{detail.percent}}%;"></div>
+								</div>
+							{% else %}
+								{% if loop.last %}
+									{{ detail.detail}}
+								{% else %}
+									{{ detail.detail}} -
+								{% endif %}
+							{% endif %}
+						{% endfor %}
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+	</body>
+</html>

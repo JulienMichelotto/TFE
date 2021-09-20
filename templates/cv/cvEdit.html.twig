@@ -1,0 +1,358 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+	<div class="">
+		<a href="{{ path('curiculumList')}}" class="btn btn-lg btn-outline-warning">Retour à la liste</a> 
+		<a href="{{ path('test_snappy',{id: curiculum.id})}}" class="btn btn-lg btn-outline-info ml-2">Prévisualiser</a>
+	</div>
+	<div class="display-3 text-center pt-5">Editer CV</div>
+	<div class="border-bottom border-light w-100 my-5"></div>
+	<div class="display-4 text">Job(s)</div>
+	<div class="row">
+		<div class="form-group col-4">
+			<label for="">Titre du job
+				<span class="text-danger">*</span>
+			</label>
+			<input type="text" class="form-control" id="inputTitleJob" aria-describedby="" placeholder="">
+		</div>
+		<div class="form-group col-4">
+			<label for="">Nom de la société (facultatif)</label>
+			<input type="text" class="form-control" id="inputSocietyJob" aria-describedby="" placeholder="">
+		</div>
+		<div class="form-group col-4">
+			<label for="">Ville
+				<span class="text-danger">*</span>
+			</label>
+			<input type="text" class="form-control" id="inputCityJob" aria-describedby="" placeholder="">
+		</div>
+		<div class="form-group date col-4" data-provide="datepicker">
+			<label for="">Démarre le
+				<span class="text-danger">*</span>
+			</label>
+			<input type="date" class="form-control" id="inputFromJob">
+		</div>
+		<div class="form-group date col-4" data-provide="datepicker">
+			<label for="">Finit le (ne rien mettre si en cours)</label>
+			<input type="date" class="form-control" id="inputToJob">
+		</div>
+		<div class="col-6">
+			<div class="btn btn-outline-success form-control col-6 jq-add-job">Ajouter job</div>
+		</div>
+	</div>
+	<div class="display-4 text pt-4">Liste <small class="h5 text-muted">Jobs</small></div>
+	<div class="row py-3" id="listeJob">
+		{% include "cv/listJob.html.twig" %}
+	</div>
+	<div class="border-bottom border-light w-100 my-5"></div>
+    <div class="display-4 text">Formation(s)</div>
+	<div class="row">
+		<div class="form-group col-4">
+			<label for="exampleInputEmail1">Titre de la formation
+				<span class="text-danger">*</span>
+			</label>
+			<input type="text" class="form-control" id="inputTitleForm" aria-describedby="" placeholder="">
+		</div>
+		<div class="form-group col-4">
+			<label for="exampleInputEmail1">Nom de la société (facultatif)</label>
+			<input type="text" class="form-control" id="inputSocietyForm" aria-describedby="" placeholder="">
+		</div>
+		<div class="form-group col-4">
+			<label for="exampleInputEmail1">Ville
+				<span class="text-danger">*</span>
+			</label>
+			<input type="text" class="form-control" id="inputCityForm" aria-describedby="" placeholder="">
+		</div>
+		<div class="form-group date col-4" data-provide="datepicker">
+			<label for="">Démarre le
+				<span class="text-danger">*</span>
+			</label>
+			<input type="date" id="inputStartForm" class="form-control">
+		</div>
+		<div class="form-group date col-4" data-provide="datepicker">
+			<label for="">Finit le (ne rien mettre si en cours)</label>
+			<input type="date" id="inputEndForm" class="form-control">
+		</div>
+		<div class="col-6">
+			<div class="btn btn-outline-success form-control jq-add-form col-6">Ajouter formation</div>
+		</div>
+	</div>
+	<div class="display-4 text pt-4">Liste <small class="h5 text-muted">Formations</small></div>
+	<div class="row py-3" id="listeForm">
+		{% include 'cv/listForm.html.twig' %}
+	</div>
+	<div class="border-bottom border-light w-100 my-5"></div>
+    <div class="display-4 text">Extra(s)</div>
+	<div class="row">
+		<div class="form-group col-12">
+			<label for="exampleInputEmail1">Titre de l'extra
+				<span class="text-danger">*</span>
+			</label>
+			<input type="text" class="form-control col-4" id="inputTitleExtra" aria-describedby="" placeholder="">
+		</div>
+		<div class="col-6">
+			<div class="btn btn-outline-success form-control col-6 jq-add-extra">Ajouter un extra</div>
+		</div>
+	</div>
+	<div class="display-4 text pt-4">Liste <small class="h5 text-muted">Extras</small></div>
+	<div class="row py-3" id="listeExtra">
+		{% include 'cv/listExtra.html.twig' %}
+	</div>
+{% endblock %}
+{% block javascripts %}
+	<script>
+	
+		$(function() {
+			//**********************************************//
+			//************Gestion des Jobs Début************//
+			//**********************************************//
+			$(document).on('click', '.jq-add-job', function(event) {
+				event.preventDefault();
+				let descr = $('#inputTitleJob').val();
+				let societyName = $('#inputSocietyJob').val();
+				let jobCity = $('#inputCityJob').val();
+				let start = $('#inputFromJob').val();
+				let end = $('#inputToJob').val();
+				let id = {{ curiculum.id }} ;
+				$.ajax({
+					method: "POST",
+					data: {descr,societyName,jobCity,start,end,id},
+					url: '{{ path('createJob') }}'
+            	})
+                .done(function (results) {
+                    $('#listeJob').html(results);
+                });
+			})
+			$(document).on('click', '.jq-dell-job', function(event) {
+				event.preventDefault();
+				// idToDell
+				let idJob = $(this).attr('id');
+				let idCuriculum = {{ curiculum.id }} ;
+				$.confirm({
+					title: 'Attention !!',
+					titleClass: 'text-danger',
+					content: '<p class="text-dark">Cette action est irréversible !<br>Êtes-vous sur de vouloir supprimer cet élément ?</p>',
+					buttons: {
+						confirm: {
+							text: 'Confirmer',
+							btnClass: 'btn-success',
+							action: function(){	
+								$.ajax({
+									method: "POST",
+									data: {idJob,idCuriculum},
+									url: '{{ path('deleteJob') }}'
+								})
+								.done(function (results) {
+									$('#listeJob').html(results);
+								});
+							}
+						},
+						cancel: {
+							text: 'Annuler',
+							btnClass: 'btn-danger',
+							action: function(){	
+							}
+						}
+					}
+				});
+			})
+			$(document).on('click', '.jq-add-detail-job', function(event) {
+				event.preventDefault();
+				let idCuriculum = {{ curiculum.id }} ;
+				let idJob = $(this).attr('data-idJob');
+				let detail = $('#input-job-detail-'+idJob).val();
+				$.ajax({
+					method: "POST",
+					data: {idJob,detail,idCuriculum},
+					url: '{{ path('createDetailJob') }}'
+            	})
+                .done(function (results) {
+                    $('#listeJob').html(results);
+                });
+			})
+			$(document).on('click', '.jq-dell-detail-job', function(event) {
+				event.preventDefault();
+				let idCuriculum = {{ curiculum.id }} ;
+				let idJobDetail = $(this).attr('data-idJobDetail');
+				
+				$.ajax({
+					method: "POST",
+					data: {idJobDetail,idCuriculum},
+					url: '{{ path('deleteDetailJob') }}'
+            	})
+                .done(function (results) {
+                    $('#listeJob').html(results);
+                });
+			})
+			//*********************************************//
+			//************Gestion des Jobs fin*************//
+			//*********************************************//
+
+
+			//****************************************************//
+			//************Gestion des formations Début************//
+			//****************************************************//
+			$(document).on('click', '.jq-add-form', function(event) {
+				event.preventDefault();
+				let descr = $('#inputTitleForm').val();
+				let societyName = $('#inputSocietyForm').val();
+				let city = $('#inputCityForm').val();
+				let start = $('#inputStartForm').val();
+				let end = $('#inputEndForm').val();
+				let id = {{ curiculum.id }} ;
+				$.ajax({
+					method: "POST",
+					data: {descr,societyName,city,start,end,id},
+					url: '{{ path('createFormation') }}'
+            	})
+                .done(function (results) {
+                    $('#listeForm').html(results);
+                });
+			})
+			$(document).on('click', '.jq-dell-formation', function(event) {
+				event.preventDefault();
+				// idToDell
+				let idForm = $(this).attr('id');
+				let idCuriculum = {{ curiculum.id }} ;
+				$.confirm({
+					title: 'Attention !!',
+					titleClass: 'text-danger',
+					content: '<p class="text-dark">Cette action est irréversible !<br>Êtes-vous sur de vouloir supprimer cet élément ?</p>',
+					buttons: {
+						confirm: {
+							text: 'Confirmer',
+							btnClass: 'btn-success',
+							action: function(){	
+								$.ajax({
+									method: "POST",
+									data: {idForm,idCuriculum},
+									url: '{{ path('deleteFormation') }}'
+								})
+								.done(function (results) {
+									$('#listeForm').html(results);
+								});
+							}
+						},
+						cancel: {
+							text: 'Annuler',
+							btnClass: 'btn-danger',
+							action: function(){	
+							}
+						}
+					}
+				});
+			})
+		
+			$(document).on('click', '.jq-add-detail-form', function(event) {
+				event.preventDefault();
+				let idCuriculum = {{ curiculum.id }} ;
+				let idForm = $(this).attr('data-idForm');
+				let detail = $('#input-form-detail-'+idForm).val();
+				$.ajax({
+					method: "POST",
+					data: {idForm,detail,idCuriculum},
+					url: '{{ path('createFormationDetail') }}'
+            	})
+                .done(function (results) {
+                    $('#listeForm').html(results);
+                });
+			})
+			$(document).on('click', '.jq-dell-detail-form', function(event) {
+				event.preventDefault();
+				let idCuriculum = {{ curiculum.id }} ;
+				let idFormDetail = $(this).attr('data-idFormDetail');
+				
+				$.ajax({
+					method: "POST",
+					data: {idFormDetail,idCuriculum},
+					url: '{{ path('deleteDetailFormation') }}'
+            	})
+                .done(function (results) {
+                    $('#listeForm').html(results);
+                });
+			})
+			//****************************************************//
+			//************Gestion des formations Fin**************//
+			//****************************************************//
+
+
+			//************************************************//
+			//************Gestion des Extras Début************//
+			//************************************************//
+
+			$(document).on('click', '.jq-add-extra', function(event) {
+				event.preventDefault();
+				let title = $('#inputTitleExtra').val();
+				let id = {{ curiculum.id }} ;
+				$.ajax({
+					method: "POST",
+					data: {title,id},
+					url: '{{ path('createExtra') }}'
+            	})
+                .done(function (results) {
+                    $('#listeExtra').html(results);
+                });
+			})
+			$(document).on('click', '.jq-dell-extra', function(event) {
+				event.preventDefault();
+				// idToDell
+				let idExtra = $(this).attr('id');
+				let idCuriculum = {{ curiculum.id }} ;
+				$.confirm({
+					title: 'Attention !!',
+					titleClass: 'text-danger',
+					content: '<p class="text-dark">Cette action est irréversible !<br>Êtes-vous sur de vouloir supprimer cet élément ?</p>',
+					buttons: {
+						confirm: {
+							text: 'Confirmer',
+							btnClass: 'btn-success',
+							action: function(){	
+								$.ajax({
+									method: "POST",
+									data: {idExtra,idCuriculum},
+									url: '{{ path('deleteExtra') }}'
+								})
+								.done(function (results) {
+									$('#listeExtra').html(results);
+								});
+							}
+						},
+						cancel: {
+							text: 'Annuler',
+							btnClass: 'btn-danger',
+							action: function(){	
+							}
+						}
+					}
+				});
+
+			})
+			$(document).on('click', '.jq-add-detail-extra', function(event) {
+				event.preventDefault();
+				let idCuriculum = {{ curiculum.id }} ;
+				let idExtra = $(this).attr('data-idExtra');
+				let detail = $('#input-extra-detail-'+idExtra).val();
+				$.ajax({
+					method: "POST",
+					data: {idExtra,detail,idCuriculum},
+					url: '{{ path('createExtraDetail') }}'
+            	})
+                .done(function (results) {
+                    $('#listeExtra').html(results);
+                });
+			})
+			$(document).on('click', '.jq-dell-detail-extra', function(event) {
+				event.preventDefault();
+				let idCuriculum = {{ curiculum.id }};
+				let idExtraDetail = $(this).attr('data-idExtraDetail');
+				
+				$.ajax({
+					method: "POST",
+					data: {idExtraDetail,idCuriculum},
+					url: '{{ path('deleteDetailExtra') }}'
+            	})
+                .done(function (results) {
+                    $('#listeExtra').html(results);
+                });
+			})
+		})
+	</script>
+{% endblock %}

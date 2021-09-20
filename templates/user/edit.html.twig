@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+	<div class="example-wrapper">
+		<div class="display-3 text-center pt-5">Editer utilisateur</div>
+		{{ form_start(form) }}
+		<fieldset>
+			<div class="form-group row">
+				<div class="col-sm-6 no-gutters ">
+					<div class="col-sm-12">
+						{{ form_label(form.firstName) }}
+					</div>
+					<div class="col-sm-12">
+						{{ form_widget(form.firstName, { 'attr': { 'class': 'form-control' } }) }}
+					</div>
+				</div>
+				<div class="col-sm-6 no-gutters">
+					<div class="col-sm-12">
+						{{ form_label(form.lastName) }}
+					</div>
+					<div class="col-sm-12">
+						{{ form_widget(form.lastName, { 'attr': { 'class': 'form-control' } }) }}
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-6 no-gutters">
+					<div class="col-sm-12">
+						{{ form_label(form.email) }}
+					</div>
+					<div class="col-sm-12">
+						{{ form_widget(form.email, { 'attr': { 'class': 'form-control' } }) }}
+					</div>
+				</div>
+				<div class="col-sm-6 no-gutters">
+					<div class="col-sm-12">
+						{{ form_label(form.gender) }}
+					</div>
+					<div class="col-sm-12">
+						{{ form_widget(form.gender, { 'attr': { 'class': 'form-control' } }) }}
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-6 no-gutters">
+					<div class="col-sm-12">
+						{{ form_label(form.phoneNumber) }}
+					</div>
+					<div class="col-sm-12">
+						{{ form_widget(form.phoneNumber, { 'attr': { 'class': 'form-control' } }) }}
+					</div>
+				</div>
+				<div class="col-sm-6 no-gutters">
+					<div class="col-sm-12">
+						{{ form_label(form.gsmNumber) }}
+					</div>
+					<div class="col-sm-12">
+						{{ form_widget(form.gsmNumber, { 'attr': { 'class': 'form-control' } }) }}
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-6 no-gutters">
+					<div class="col-sm-12">
+						{{ form_label(form.address) }}
+					</div>
+					<div class="col-sm-12">
+						{{ form_widget(form.address, { 'attr': { 'class': 'form-control' } }) }}
+					</div>
+				</div>
+				<div class="col-sm-6 no-gutters">
+					<div class="row">
+						<div class="col-sm-6 no-gutters">
+							<div class="col-sm-12">
+								{{ form_label(form.streetNumber) }}
+							</div>
+							<div class="col-sm-12">
+								{{ form_widget(form.streetNumber, { 'attr': { 'class': 'form-control' } }) }}
+							</div>
+						</div>
+						<div class="col-sm-6 no-gutters">
+							<div class="col-sm-12">
+								{{ form_label(form.boxNumber) }}
+							</div>
+							<div class="col-sm-12">
+								{{ form_widget(form.boxNumber, { 'attr': { 'class': 'form-control' } }) }}
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<div class="form-group row mt-4">
+				<div class="col-sm-3">
+					{{ form_widget(form.save, { 'attr': { 'class': 'btn btn-outline-success btn-block' }}) }}
+				</div>
+				<div class="col-sm-3"><a class="btn btn-outline-warning w-100" href="{{ path('userList') }}">Retour à la liste</a></div>
+			</div>
+		</fieldset>
+		{{ form_end(form) }}
+	</div>
+{% endblock %}

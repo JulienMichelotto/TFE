@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+	<div class="display-3 text-center p-5">Liste des curriculums</div>
+	{# <form action="{{path('curiculumCreate')}}" method="POST">
+		<div class="form-group">
+			<div class="row">
+				<div class="col-4">
+					<label for="">Titre</label>
+					<input name="title" type="text" class="form-control" id="" placeholder="Entrez le titre de votre prochain CV">
+				</div>
+				<div class="col-3">
+					<button type="submit" class="btn btn-outline-success h-100 px-4 text-uppercase">Créer un nouveau CV</button>
+				</div>
+			</div>
+		</div>
+	</form> #}
+	{{ form_start(form)}}
+			<div class="form-group row">
+				<div class="col-4">
+					{{ form_label(form.title) }}
+					{{ form_widget(form.title, { 'attr': { 'class': 'form-control' } }) }}
+				</div>
+				<div class="col-4 form-group">
+					{{ form_label(form.imageFile) }}
+					{{ form_widget(form.imageFile, { 'attr': { 'class': 'form-control' } }) }}
+				</div>
+				<div class="col-sm-4">
+					{{ form_widget(form.save, { 'attr': { 'class': 'btn btn-outline-success h-100 px-4 text-uppercase' }}) }}
+				</div>
+			</div>
+	{{ form_end(form)}}
+	<table class="table table-striped table-hover">
+		<thead>
+			<tr>
+				<th scope="col">ID</th>
+				<th scope="col">titre</th>
+				<th scope="col">actions</th>
+			</tr>
+		</thead>
+		<tbody id="listeCv">
+			{% include "cv/listeCv.html.twig" %}
+		</tbody>
+	</table>
+{% endblock %}
+{% block javascripts %}
+		<script>
+		$(function() {
+			$(document).on('click', '.jq-dell-cv', function(event) {
+				event.preventDefault();
+				// idToDell
+				let idCv = $(this).attr('id');
+				$.confirm({
+					title: 'Attention !!',
+					titleClass: 'text-danger',
+					content: '<p class="text-dark">Cette action est irréversible !<br>Êtes-vous sur de vouloir supprimer cet élément ?</p>',
+					buttons: {
+						confirm: {
+							text: 'Confirmer',
+							btnClass: 'btn-success',
+							action: function(){	
+								$.ajax({
+									method: "POST",
+									data: {idCv},
+									url: "{{ path('curiculumDelete') }}"
+								})
+								.done(function (results) {
+									$('#listeCv').html(results);
+								});
+							}
+						},
+						cancel: {
+							text: 'Annuler',
+							btnClass: 'btn-danger',
+							action: function(){	
+							}
+						}
+					}
+				});
+			})
+		})
+	</script>
+{% endblock %}

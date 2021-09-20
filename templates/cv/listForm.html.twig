@@ -1,0 +1,38 @@
+{% for formation in curiculum.formation %}
+	{% if formation.active %}
+		<div class="col-4">
+			<div class="h5 text-center bg-dark mb-0 p-2">
+				<a href="#" class="ml-1 jq-dell-formation" id="{{formation.id}}" style="position:absolute; top:0px; right:21px;">
+					<i class="fas fa-times text-danger"></i>
+				</a>
+				<div class="mt-4">
+					{{formation.descr}}
+				</div>
+				{% if formation.name %}
+					<small class="text-muted">{{formation.name}}</small>
+				{% endif %}
+				{% if formation.city %}
+
+					<small class="text-muted">{{formation.city}}</small>
+				{% endif %}
+			</div>
+			<div class="bg-secondary p-3">
+				<div>
+					<input type="text" id="input-form-detail-{{formation.id}}" placeholder="Entrez un détail">
+					<a href="#" class="jq-add-detail-form" data-idform="{{formation.id}}">
+						<i class="fas fa-plus-circle btn text-success" style="font-size:1.5rem;"></i>
+					</a>
+				</div>
+				{% for detail in formation.details %}
+					<div class="w-100 border-bottom border-dark">
+						<div class="color-success mr-2 bg-secondary border-secondary text-white" style="font-size:1rem;">{{detail.detail}}
+							<a href="#" class="ml-2">
+								<i class="fas fa-trash-alt text-danger jq-dell-detail-form" data-idformdetail="{{detail.id}}" aria-hidden="true"></i>
+							</a>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+{% endfor %}

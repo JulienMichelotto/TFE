@@ -1,0 +1,142 @@
+{% extends "base.html.twig" %}
+{% block stylesheets %}
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.11.1/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/> <!-- 'classic' theme -->
+{% endblock %}
+{% block body %}
+	<div class="display-3 text-center p-5">Liste des couleurs</div>
+	<form action="">
+		<div class="form-group">
+			<div class="row no-gutters">
+				<label class="col-12">Choisissez une couleur à ajouter</label>
+				<div class="col-3">
+					<input class="color-picker">
+				</div>
+				
+				<div id="color-hex" data-color-hex="" class="form-control color-picker col-6 d-none"></div>
+				<div class="col-3 ml-3">
+					<div class="btn btn-outline-success h-100 px-4 text-uppercase jq-add-color">Ajouter une couleur</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	<table id="example" class="table table-striped table-hover">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>HEX</th>
+                <th>Actions</th>
+			</tr>
+		</thead>
+		<tbody id="listColor">
+			{% include "color/listColor.html.twig" %}
+		</tbody>
+		<tfoot>
+			<tr>
+				<th>ID</th>
+				<th>HEX</th>
+				<th>Actions</th>
+			</tr>
+		</tfoot>
+	</table>
+
+{% endblock %}
+
+{% block javascripts %}
+	<script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.11.1/js/dataTables.bootstrap4.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('#example').DataTable();
+
+			// Simple example, see optional options for more configuration.
+
+		$(function() {
+			const pickr = new Pickr({
+				el: '.color-picker',
+				theme: 'classic', // or 'monolith', or 'nano'
+				appClass: 'custom-class',
+				swatches: [
+					'rgba(244, 67, 54, 1)',
+					'rgba(233, 30, 99, 1)',
+					'rgba(156, 39, 176, 1)',
+					'rgba(103, 58, 183, 1)',
+					'rgba(63, 81, 181, 1)',
+					'rgba(33, 150, 243, 1)',
+					'rgba(3, 169, 244, 1)',
+					'rgba(0, 188, 212, 1)',
+					'rgba(0, 150, 136, 1)',
+					'rgba(76, 175, 80, 1)',
+					'rgba(139, 195, 74, 1)',
+					'rgba(205, 220, 57, 1)',
+					'rgba(255, 235, 59, 1)',
+					'rgba(255, 193, 7, 1)'
+				],
+				components: {
+					// Main components
+					preview: true,
+					opacity: false,
+					hue: true,
+
+					// Input / output Options
+					interaction: {
+						hex: true,
+						input: true,
+						clear: true,
+						save: true
+					}
+				}
+			});
+			pickr.on('change', (color, source, instance) => {
+				$('#color-hex').attr('data-color-hex', '#'+color.toHEXA()[0]+color.toHEXA()[1]+color.toHEXA()[2]);
+				//console.log( '#'+color.toHEXA()[0]+color.toHEXA()[1]+color.toHEXA()[2]);
+			});
+		});
+			$(document).on('click', '.jq-add-color', function(event){
+				event.preventDefault();
+				let color = $('#color-hex').attr('data-color-hex');
+				$.ajax({
+					method: "POST",
+					data: {color},
+					url: "{{ path('colorCreate') }}"
+				})
+				.done(function (results) {
+					$('#listColor').html(results);
+				});
+			})
+			$(document).on('click', '.jq-dell-color', function(event) {
+				event.preventDefault();
+				// idToDell
+				let idColor = $(this).attr('id');
+				$.confirm({
+					title: 'Attention !!',
+					titleClass: 'text-danger',
+					content: '<p class="text-dark">Cette action est irréversible !<br>Êtes-vous sur de vouloir supprimer cet élément ?</p>',
+					buttons: {
+						confirm: {
+							text: 'Confirmer',
+							btnClass: 'btn-success',
+							action: function(){	
+								$.ajax({
+									method: "POST",
+									data: {idColor},
+									url: "{{ path('colorDelete') }}"
+								})
+								.done(function (results) {
+									$('#listColor').html(results);
+								});
+							}
+						},
+						cancel: {
+							text: 'Annuler',
+							btnClass: 'btn-danger',
+							action: function(){	
+							}
+						}
+					}
+				});
+			})
+		})
+	</script>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="example-wrapper">
+        <div class="w-100 text-center h1">
+            <p>Hello world</p>
+            <p>Bienvennue sur ce super site</p>
+            <p>Vous allez pouvoir créer votre CV</p>
+            <p>Totalement gratuitement !!</p>
+        </div>
+
+        <div class="w-auto mx-auto row pt-5">
+            <a href="login" class="col-6">
+                <button class="btn btn-info btn-lg float-right">Connexion</button>
+            </a>
+            <a href="inscription"class="col-6">
+                <button class="btn btn-warning btn-lg">M'inscrire</button>
+            </a>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+{% endblock %}
